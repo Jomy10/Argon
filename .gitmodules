@@ -1,0 +1,3 @@
+[submodule "deps/olive.c"]
+	path = deps/olive.c
+	url = https://github.com/tsoding/olive.c

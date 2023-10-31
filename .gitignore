@@ -1,0 +1,7 @@
+compile_commands.json
+.beaver
+minifb
+out
+**/*.DS_Store*
+.cache
+
