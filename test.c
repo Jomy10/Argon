@@ -26,25 +26,18 @@ int main() {
   arHStack_setWidth(hstack, 2, 100);
   arView_addChild(container, hstack);
 
+  arView* fillContainer = arContainer_create(200, 100);
   arView* fill = arFill_create(0xFF0000FF);
-  if (fill == NULL) {
-    printf("is null\n");
-    return 1;
-  }
-  arView_addChild(hstack, fill);
+  arFont font = arFont_newBitmap(olivec_default_font, 2, 0xFFFFF0FF);
+  arView* fillText = arText_create("hello world", font, false);
+  arView_addChild(fillContainer, fill);
+  arView_addChild(fillContainer, fillText);
+  arView_addChild(hstack, fillContainer);
 
   arView* fill1 = arFill_create(0x0000ffF0);
-  if (fill == NULL) {
-    printf("is null\n");
-    return 1;
-  }
   arView_addChild(hstack, fill1);
 
   arView* fill2 = arFill_create(0x00ff00FF);
-  if (fill == NULL) {
-    printf("is null\n");
-    return 1;
-  }
   arView_addChild(hstack, fill2);
 
   do {

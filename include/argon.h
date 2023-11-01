@@ -19,6 +19,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // 
 
+//
+// # Usage
+//
+// Functions in the form of `[...]_create` create a new object that should be
+// deallocated using `[...]_destroy`. Functions in the form of `[...]_new` create
+// objects that shouldn't be deallocated.
+//
+
 #ifndef _ARGON_H
 #define _ARGON_H
 
@@ -61,6 +69,10 @@ typedef struct _arUI {
 ArgonUI argon_init(uint32_t* buffer, int w, int h, int stride);
 void argon_draw(ArgonUI*, arView* root);
 
+typedef struct {
+  int l, r, u, d;
+} arMargin;
+
 // views //
 arView* arFill_create(arColor);
 void arFill_setColor(arView* self, arColor);
@@ -77,6 +89,28 @@ arView* arVStack_create();
 void arVStack_setHeight(arView* self, int at_index, int width);
 void arVStack_assureMinHeightCap(arView* self, int cap);
 
+typedef Olivec_Font arBitmapFont;
+enum FontType {
+  AR_FONT_BITMAP,
+};
+
+union FontValue {
+  arBitmapFont bitmap_font;
+};
+
+struct _arFont {
+  enum FontType type;
+  union FontValue value;
+  size_t size;
+  arColor color;
+};
+typedef struct _arFont arFont;
+arFont arFont_newBitmap(arBitmapFont, size_t size, arColor color);
+arView* arText_create(char* text, arFont font, bool shouldDeallocateText);
+void arText_setText(arView* self, char* text);
+void arText_setBitmapFont(arView* self, arBitmapFont font);
+void arText_setColor(arView* self, arColor color);
+void arText_setSize(arView* self, size_t size);
 
 struct _arChildrenList {
   int size;

@@ -50,11 +50,6 @@ static void _arView_default_draw_cb(arView* self, Olivec_Canvas canvas) {
   }
 }
 
-static void _arView_default_destroy_cb(arView* self) {
-  if (self->data != NULL)
-    free(self->data);
-}
-
 arView* arView_create() {
   arView* view = malloc(sizeof(arView));
   view->data = NULL;
@@ -62,18 +57,24 @@ arView* arView_create() {
   view->draw = _arView_default_draw_cb;
   view->should_rerender = true;
   view->parent = NULL;
-  view->destroy = _arView_default_destroy_cb;
+  view->destroy = NULL;
 
   return view;
 }
 
 void arView_destroy(arView* self) {
+  // free data
   if (self->destroy != NULL)
     self->destroy(self);
-
-  childrenList_free(self->children);
   if (self->data != NULL)
     free(self->data);
+
+  for (int i = 0; i < self->children->size; i++) {
+    arView_destroy(self->children->values[i]);
+  }
+  childrenList_free(self->children);
+
+  free(self);
 }
 
 void arView_addChild(arView* self, arView* child) {
