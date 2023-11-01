@@ -47,7 +47,7 @@ void arView_draw(arView* self, Olivec_Canvas canvas) {
 static void _arView_default_draw_cb(arView* self, Olivec_Canvas canvas) {
   for (int i = 0; i < self->children->size; i++) {
     arView* child = self->children->values[i];
-    child->draw(child, canvas);
+    arView_draw(child, canvas);
   }
 }
 
