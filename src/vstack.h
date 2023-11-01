@@ -15,7 +15,7 @@ static void _arVStack_draw(arView* self, Olivec_Canvas canvas) {
     child = self->children->values[i];
     height = widths->values[i < widths->count ? i : widths->count];
     subcanvas = olivec_subcanvas(canvas, 0, y, canvas.width, height);
-    child->draw(child, subcanvas);
+    arView_draw(child, subcanvas);
     y += height;
   }
 }
@@ -29,6 +29,7 @@ arView* arVStack_create() {
 }
 
 void arVStack_setHeight(arView* self, int at_index, int height) {
+  self->should_rerender = true;
   IntArray* data = ((IntArray*)self->data);
   IntArray_assureMinCap(data, at_index + 1);
 

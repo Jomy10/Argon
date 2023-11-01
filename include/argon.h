@@ -80,6 +80,8 @@ void arFill_setColor(arView* self, arColor);
 arView* arContainer_create(size_t w, size_t h);
 void arContainer_setWidth(arView*, size_t);
 void arContainer_setHeight(arView*, size_t);
+void arContainer_setMargin(arView*, arMargin);
+arMargin arContainer_getMargin(arView*);
 
 arView* arHStack_create();
 void arHStack_setWidth(arView* self, int at_index, int width);

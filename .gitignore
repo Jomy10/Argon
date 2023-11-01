@@ -4,4 +4,5 @@ minifb
 out
 **/*.DS_Store*
 .cache
+a.out*
 

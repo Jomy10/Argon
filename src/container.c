@@ -7,11 +7,17 @@
 
 typedef struct {
   size_t w, h;
+  arMargin margin;
 } arContainerData;
 
 static void _arContainer_draw(arView* self, Olivec_Canvas maincanvas) {
   arContainerData* data = ((arContainerData*)self->data);
-  Olivec_Canvas canvas = olivec_subcanvas(maincanvas, 0, 0, data->w, data->h);
+  Olivec_Canvas canvas = olivec_subcanvas(
+    maincanvas,
+    data->margin.l,
+    data->margin.u,
+    data->w - data->margin.r - data->margin.l,
+    data->h - data->margin.d - data->margin.u);
   for (int i = 0; i < self->children->size; i++) {
     arView_draw(self->children->values[i], canvas);
   }
@@ -24,14 +30,26 @@ arView* arContainer_create(size_t w, size_t h) {
   arContainerData* data = view->data;
   data->w = w;
   data->h = h;
+  data->margin = (arMargin){0};
   return view;
 }
 
 void arContainer_setWidth(arView* self, size_t w) {
+  self->should_rerender = true;
   ((arContainerData*)self->data)->w = w;
 }
 
 void arContainer_setHeight(arView* self, size_t h) {
+  self->should_rerender = true;
   ((arContainerData*)self->data)->h = h;
+}
+
+void arContainer_setMargin(arView* self, arMargin margin) {
+  self->should_rerender = true;
+  ((arContainerData*)self->data)->margin = margin;
+}
+
+arMargin arContainer_getMargin(arView* self) {
+  return ((arContainerData*)self->data)->margin;
 }
 

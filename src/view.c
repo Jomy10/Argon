@@ -32,15 +32,16 @@ static void childrenList_assureMinCap(ChildrenList* self, int cap) {
 }
 
 void arView_draw(arView* self, Olivec_Canvas canvas) {
+  self->previous_canvas = canvas;
   if (self->should_rerender) {
     self->draw(self, canvas);
+    self->should_rerender = false;
   } else {
     for (int i = 0; i < self->children->size; i++) {
       arView* child = self->children->values[i];
-      child->draw(child, child->previous_canvas);
+      arView_draw(child, child->previous_canvas);
     }
   }
-  self->previous_canvas = canvas;
 }
 
 static void _arView_default_draw_cb(arView* self, Olivec_Canvas canvas) {

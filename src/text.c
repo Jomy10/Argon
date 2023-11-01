@@ -18,7 +18,10 @@ typedef struct {
   bool deallocateText;
 } arTextData;
 
+#include <stdio.h>
+
 static void _arText_draw(arView* self, Olivec_Canvas canvas) {
+  printf("drawing text\n");
   arTextData* data = (arTextData*)self->data;
   switch (data->font.type) {
     case AR_FONT_BITMAP:
@@ -49,19 +52,23 @@ arView* arText_create(char* text, arFont font, bool shouldDeallocateText) {
 }
 
 void arText_setText(arView* self, char* text) {
+  self->should_rerender = true;
   self->destroy(self); // deallocate text
   ((arTextData*)self->data)->text = text;
 }
 
 void arText_setBitmapFont(arView* self, arBitmapFont font) {
+  self->should_rerender = true;
   ((arTextData*)self->data)->font.type = AR_FONT_BITMAP;
   ((arTextData*)self->data)->font.value.bitmap_font = font;
 }
 
 void arText_setColor(arView* self, arColor color) {
+  self->should_rerender = true;
   ((arTextData*)self->data)->font.color = color;
 }
 void arText_setSize(arView* self, size_t size) {
+  self->should_rerender = true;
   ((arTextData*)self->data)->font.size = size;
 }
 

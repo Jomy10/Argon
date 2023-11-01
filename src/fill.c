@@ -1,3 +1,4 @@
+#define OLIVEC_IMPLEMENTATION
 #include "../include/argon.h"
 
 #include <stdlib.h>
@@ -6,10 +7,10 @@ typedef struct {
   arColor color;
 } arFillData;
 
-#define OLIVEC_IMPLEMENTATION
-#include <olive.c>
+#include <stdio.h>
 
 static void _arFill_draw(arView* self, Olivec_Canvas canvas) {
+  printf("filling 0x%08x in %lu->%lu @ %p\n", ((arFillData*)self->data)->color, canvas.width, canvas.height, canvas.pixels);
   olivec_fill(canvas, ((arFillData*)self->data)->color);
 }
 
