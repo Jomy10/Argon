@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'beaver'
-require 'FileUtils'
+require 'fileutils'
 require 'colorize'
 
 $beaver.set :e
