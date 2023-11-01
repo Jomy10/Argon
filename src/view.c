@@ -59,6 +59,7 @@ arView* arView_create() {
   view->should_rerender = true;
   view->parent = NULL;
   view->destroy = NULL;
+  view->previous_canvas = OLIVEC_CANVAS_NULL;
 
   return view;
 }
