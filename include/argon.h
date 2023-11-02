@@ -1,31 +1,33 @@
-//
-// Argon
-// =====
-// A simple UI library that renders to a framebuffer for C and C++.
-//
-// Copyright (C) 2023  Jonas Everaert
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-// 
-
-//
-// # Usage
-//
-// Functions in the form of `[...]_create` create a new object that should be
-// deallocated using `[...]_destroy`. Functions in the form of `[...]_new` create
-// objects that shouldn't be deallocated.
-//
+///
+/// Argon
+/// =====
+/// @brief A simple UI library that renders to a framebuffer for C and C++.
+/// @date 31 Oct 2023
+/// @file argon.h
+/// @author Jonas Everaert
+///
+/// Copyright (C) 2023  Jonas Everaert
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU Lesser General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU Lesser General Public License for more details.
+///
+/// You should have received a copy of the GNU Lesser General Public License
+/// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+/// 
+///
+/// ## Usage
+///
+/// Functions in the form of `[...]_create` create a new object that should be
+/// deallocated using `[...]_destroy`. Functions in the form of `[...]_new` create
+/// objects that shouldn't be deallocated.
+///
 
 #ifndef _ARGON_H
 #define _ARGON_H
@@ -61,10 +63,10 @@ typedef struct _arView {
   bool should_rerender;
   Olivec_Canvas previous_canvas;
   struct _arUI* ui;
-  // Position within the parent container
+  /// Position within the parent container
   arPosition current_pos;
   void (*draw)(struct _arView* self, Olivec_Canvas canvas);
-  // nullable
+  /// nullable
   void (*destroy)(struct _arView* self);
   void (*onClick)(struct _arView* self);
 } arView;
@@ -79,14 +81,14 @@ typedef struct _arUI {
 } ArgonUI;
 
 // Argon //
-// Create a new ArgonUI context and set it as the current context
+/// Create a new ArgonUI context and set it as the current context
 ArgonUI* argon_create(uint32_t* buffer, int w, int h, int stride);
 void argon_destroy(ArgonUI*);
-// to redraw the UI after resize, call root->should_rerender = true
+/// to redraw the UI after resize, call root->should_rerender = true
 void argon_resize(ArgonUI* ui, uint32_t* buffer, int w, int h, int stride);
 void argon_draw(ArgonUI*, arView* root);
 void argon_handleEvents(ArgonUI*, arView*);
-// Set the context to be used for any [view]_create() calls
+/// Set the context to be used for any [view]_create() calls
 void argon_setContext(ArgonUI*);
 ArgonUI* argon_getCurrentContext();
 
@@ -112,12 +114,15 @@ typedef struct {
 void argon_dispatchEvent(ArgonUI* state, arEvent event);
 
 // views //
-// Create a default arView.
-// The default arView works as a generic container for UI elements
+/// Create a default arView.
+/// The default arView works as a generic container for UI elements
 arView* arView_create();
 void arView_destroy(arView* self);
-// - at [arPosition]: coordinates in the global canvas, not used for actual drawing,
-//   but for handling input events
+//// Draw a view into a canvas
+///
+/// @param at[in] coordinates in the parent's canvas (or the global canvas in case
+///               of the root view), not used for actual drawing, but for handling
+///               input events
 void arView_draw(arView* self, Olivec_Canvas, arPosition at);
 void arView_addChild(arView* self, arView* child);
 void arView_setOnClick(arView* self, void (*onClick)(arView* self));
@@ -169,9 +174,9 @@ void arText_setSize(arView* self, size_t size);
 arView* arCanvas_create(size_t width, size_t height);
 arView* arCanvas_createWithData(uint32_t* data, size_t width, size_t height);
 arView* arCanvas_createWithCanvas(Olivec_Canvas canvas);
-// to redraw the canvas, call self->should_rerender = true;
+/// to redraw the canvas, call self->should_rerender = true;
 Olivec_Canvas arCanvas_getCanvas(arView* self);
-// to redraw the canvas, call self->should_rerender = true;
+/// to redraw the canvas, call self->should_rerender = true;
 uint32_t* arCanvas_getData(arView* self);
 
 // TODO: dynamic canvas (variable size/width) & SubCanvas (draw directly onto framebuffer)

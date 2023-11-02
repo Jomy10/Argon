@@ -31,7 +31,7 @@ void container_onClick(arView* self) {
 #define WIDTH 800
 #define HEIGHT 400
 
-int main() {
+int main(int argc, char** argv) {
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window* window = SDL_CreateWindow("test",
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -41,9 +41,15 @@ int main() {
   SDL_Surface* window_surface = SDL_GetWindowSurface(window);
   uint32_t* buffer = window_surface->pixels;
   // should be SDL_PIXELFORMAT_ARGB8888
-  printf("Pixel format: %s\n", SDL_GetPixelFormatName(window_surface->format->format));
+  //printf("Pixel format: %s\n", SDL_GetPixelFormatName(window_surface->format->format));
 
-  // uint32_t* buffer = (uint32_t*) malloc(WIDTH * HEIGHT * 4);
+  char* example;
+  if (argc == 0) {
+    example = "test";
+  } else {
+    example = argv[0];
+  }
+  // TODO: render correct example
 
   ArgonUI* ui = argon_create(buffer, WIDTH, HEIGHT, WIDTH);
 
