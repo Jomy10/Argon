@@ -47,5 +47,12 @@ cmd :docs do
   end
 end
 
+cmd :clean do
+  sh %(rm -rf .beaver)
+  sh %(rm -rf #{OUT})
+  sh %(rm -rf docs/html)
+  sh %(rm -rf docs/latex)
+end
+
 $beaver.end
 
