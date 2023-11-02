@@ -14,6 +14,7 @@ ArgonUI* argon_create(uint32_t* buffer, int width, int height, int stride) {
   ar->canvas = olivec_canvas(buffer, width, height, stride);
   ar->input_state.press_position = (arPosition){0};
   ar->input_state.events = arDispatchedEventArray_create();
+  argon_setContext(ar);
   return ar;
 }
 

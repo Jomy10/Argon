@@ -73,7 +73,7 @@ typedef struct _arView {
 } arView;
 
 // Argon //
-/// @defgroup Context
+/// @defgroup ArgonUI ArgonUI Context
 /// @{
 typedef struct _arUI {
   uint32_t* buffer;
@@ -117,6 +117,8 @@ typedef struct {
   arEventData data;
 } arEvent;
 
+// TODO: how to get this function to display in 2 groups with doxygen?
+/// @ingroup ArgonUI Events
 void argon_dispatchEvent(ArgonUI* state, arEvent event);
 /// @}
 
