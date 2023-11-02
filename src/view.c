@@ -5,6 +5,7 @@
 
 typedef struct _arChildrenList ChildrenList;
 
+// TODO: linked list?
 static ChildrenList* childrenList_create() {
   ChildrenList* list = malloc(sizeof(ChildrenList));
   list->size = 0;
@@ -31,15 +32,19 @@ static void childrenList_assureMinCap(ChildrenList* self, int cap) {
   }
 }
 
-void arView_draw(arView* self, Olivec_Canvas canvas) {
+void arView_draw(arView* self, Olivec_Canvas canvas, arPosition at) {
+  self->current_pos = at;
   self->previous_canvas = canvas;
   if (self->should_rerender) {
+    for (int i = 0; i < self->children->size; i++) {
+      self->children->values[i]->should_rerender = true;
+    }
     self->draw(self, canvas);
     self->should_rerender = false;
   } else {
     for (int i = 0; i < self->children->size; i++) {
       arView* child = self->children->values[i];
-      arView_draw(child, child->previous_canvas);
+      arView_draw(child, child->previous_canvas, child->current_pos);
     }
   }
 }
@@ -47,7 +52,7 @@ void arView_draw(arView* self, Olivec_Canvas canvas) {
 static void _arView_default_draw_cb(arView* self, Olivec_Canvas canvas) {
   for (int i = 0; i < self->children->size; i++) {
     arView* child = self->children->values[i];
-    arView_draw(child, canvas);
+    arView_draw(child, canvas, self->current_pos);
   }
 }
 
@@ -60,6 +65,9 @@ arView* arView_create() {
   view->parent = NULL;
   view->destroy = NULL;
   view->previous_canvas = OLIVEC_CANVAS_NULL;
+  view->current_pos = (arPosition){0,0};
+  view->ui = argon_getCurrentContext();
+  view->onClick = NULL;
 
   return view;
 }
@@ -83,9 +91,13 @@ void arView_addChild(arView* self, arView* child) {
   if (self->children->size == self->children->cap)
     childrenList_assureMinCap(self->children, self->children->cap == 0 ? 3 : self->children->cap * 2);
   self->children->values[self->children->size++] = child;
-  self->parent = self;
+  child->parent = self;
 
   //arvec_append(self->children, &child);
   self->should_rerender = true;
+}
+
+void arView_setOnClick(arView *self, void (*onClick)(arView* self)) {
+  self->onClick = onClick;
 }
 

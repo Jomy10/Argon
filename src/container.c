@@ -18,8 +18,15 @@ static void _arContainer_draw(arView* self, Olivec_Canvas maincanvas) {
     data->margin.u,
     data->w - data->margin.r - data->margin.l,
     data->h - data->margin.d - data->margin.u);
+  arPosition dispatchPos = self->current_pos;
+  // TODO: specify position of child everywhere,
+  // then have a argon_handleEvents() function to handle events according to 
+  // current_pos and previous_canvas.width/height
+  // ---> check all dispatched events at once to avoid having to follow pointers too much
+  dispatchPos.x += data->margin.l;
+  dispatchPos.y += data->margin.u;
   for (int i = 0; i < self->children->size; i++) {
-    arView_draw(self->children->values[i], canvas);
+    arView_draw(self->children->values[i], canvas, dispatchPos);
   }
 }
 

@@ -14,7 +14,7 @@ static void _arHStack_draw(arView* self, Olivec_Canvas canvas) {
     child = self->children->values[i];
     width = widths->values[i < widths->count ? i : widths->count];
     subcanvas = olivec_subcanvas(canvas, x, 0, width, canvas.height);
-    arView_draw(child, subcanvas);
+    arView_draw(child, subcanvas, (arPosition){x, 0});
     x += width;
   }
 }

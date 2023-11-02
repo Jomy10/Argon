@@ -2,6 +2,11 @@
 
 #include <stdlib.h>
 
+#include "array.h"
+
+AR_DEF_ARRAY(IntArray, int)
+
+/*
 IntArray* IntArray_create() {
   IntArray* array = malloc(sizeof(IntArray));
   array->cap = 0;
@@ -28,4 +33,4 @@ void IntArray_assureMinCap(IntArray* self, int cap) {
       }
     }
 }
-
+*/
