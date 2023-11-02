@@ -27,7 +27,7 @@ end
 
 cmd :test do
   call :build
-  sh %(clang #{CFLAGS} -Iminifb/include -Iminifb/src test.c out/obj/*.o minifb/src/*.c minifb/src/macosx/*.m -Iinclude -framework Metal -framework MetalKit -framework AppKit)
+  sh %(clang #{CFLAGS} #{`pkg-config sdl2 --cflags`.gsub("\n", "")} test.c out/obj/*.o #{`pkg-config sdl2 --libs`.gsub("\n", "")})#-Iminifb/include -Iminifb/src minifb/src/*.c minifb/src/macosx/*.m -Iinclude -framework Metal -framework MetalKit -framework AppKit)
 end
 
 $beaver.end

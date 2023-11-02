@@ -82,6 +82,8 @@ typedef struct _arUI {
 // Create a new ArgonUI context and set it as the current context
 ArgonUI* argon_create(uint32_t* buffer, int w, int h, int stride);
 void argon_destroy(ArgonUI*);
+// to redraw the UI after resize, call root->should_rerender = true
+void argon_resize(ArgonUI* ui, uint32_t* buffer, int w, int h, int stride);
 void argon_draw(ArgonUI*, arView* root);
 void argon_handleEvents(ArgonUI*, arView*);
 // Set the context to be used for any [view]_create() calls
@@ -154,7 +156,11 @@ struct _arFont {
 };
 typedef struct _arFont arFont;
 arFont arFont_newBitmap(arBitmapFont, size_t size, arColor color);
-arView* arText_create(char* text, arFont font, bool shouldDeallocateText);
+arView* arText_create(char* text, arFont font, bool shouldDeallocateText, bool enableWrapping);
+// Get the size of the whole text
+arSize arText_getSize(arView* self);
+// Get the size of a single glyph
+arSize arText_getGlyphSize(arView* self);
 void arText_setText(arView* self, char* text);
 void arText_setBitmapFont(arView* self, arBitmapFont font);
 void arText_setColor(arView* self, arColor color);
@@ -168,7 +174,7 @@ Olivec_Canvas arCanvas_getCanvas(arView* self);
 // to redraw the canvas, call self->should_rerender = true;
 uint32_t* arCanvas_getData(arView* self);
 
-// TODO: dynamic canvas
+// TODO: dynamic canvas (variable size/width) & SubCanvas (draw directly onto framebuffer)
 
 struct _arChildrenList {
   int size;

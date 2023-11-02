@@ -15,7 +15,7 @@ static ChildrenList* childrenList_create() {
   return list;
 }
 
-static void childrenList_free(ChildrenList* self) {
+static void childrenList_destroy(ChildrenList* self) {
   free(self->values);
   free(self);
 }
@@ -82,7 +82,7 @@ void arView_destroy(arView* self) {
   for (int i = 0; i < self->children->size; i++) {
     arView_destroy(self->children->values[i]);
   }
-  childrenList_free(self->children);
+  childrenList_destroy(self->children);
 
   free(self);
 }

@@ -22,6 +22,11 @@ void argon_destroy(ArgonUI* self) {
   free(self);
 }
 
+void argon_resize(ArgonUI* self, uint32_t* buffer, int width, int height, int stride) {
+  self->buffer = buffer;
+  self->canvas = olivec_canvas(buffer, width, height, stride);
+}
+
 void argon_draw(ArgonUI* argon, arView* root) {
   arView_draw(root, argon->canvas, (arPosition){0, 0});
 }

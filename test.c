@@ -1,8 +1,12 @@
-#include <MiniFB.h>
+#include <SDL2/SDL.h>
+#include "SDL_pixels.h"
+#include "SDL_video.h"
 #include "include/argon.h"
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include <unistd.h>
 
 #define OLIVEC_IMPLEMENTATION
@@ -24,6 +28,62 @@ void container_onClick(arView* self) {
   printf("Auwch, that hurt!\n");
 }
 
+#define WIDTH 800
+#define HEIGHT 400
+
+int main() {
+  SDL_Init(SDL_INIT_VIDEO);
+  SDL_Window* window = SDL_CreateWindow("test",
+    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE
+  );
+
+  SDL_Surface* window_surface = SDL_GetWindowSurface(window);
+  uint32_t* buffer = window_surface->pixels;
+  // should be SDL_PIXELFORMAT_ARGB8888
+  printf("Pixel format: %s\n", SDL_GetPixelFormatName(window_surface->format->format));
+
+  // uint32_t* buffer = (uint32_t*) malloc(WIDTH * HEIGHT * 4);
+
+  ArgonUI* ui = argon_create(buffer, WIDTH, HEIGHT, WIDTH);
+
+  arView* root = arView_create();
+  arView* container = arContainer_create(100, HEIGHT);
+  arView_addChild(root, container);
+  arView* fill = arFill_create(0xFFFF0000);
+  arFont font = arFont_newBitmap((arBitmapFont)olivec_default_font, 4, 0xFF00FF00);
+  arView* arText = arText_create("hello world", font, false, true);
+  arView_addChild(container, fill);
+  arView_addChild(container, arText);
+
+  while (true) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT)
+        return 0;
+      if (event.type == SDL_WINDOWEVENT) {
+        if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+          window_surface = SDL_GetWindowSurface(window);
+          buffer = window_surface->pixels;
+          argon_resize(ui, buffer, window_surface->w, window_surface->h, window_surface->w);
+          memset(buffer, 0, window_surface->w * window_surface->h * 4);
+          root->should_rerender = true;
+        }
+      }
+    }
+
+    argon_handleEvents(ui, root);
+    argon_draw(ui, root);
+
+    SDL_UpdateWindowSurface(window);
+  }
+
+  arView_destroy(root);
+  argon_destroy(ui);
+  SDL_DestroyWindow(window);
+}
+
+/*
 int main() {
   struct mfb_window* window = mfb_open_ex("test", 800, 400, WF_RESIZABLE);
   if (!window) return 1;
@@ -46,13 +106,13 @@ int main() {
   arHStack_setWidth(hstack, 2, 100);
   arView_addChild(container, hstack);
 
-  arView* fillContainer = arContainer_create(200, 100);
+  arView* fillContainer = arContainer_create(10, 100);
   //arView_setOnClick(fillContainer, container_onClick);
   //arContainer_setMargin(fillContainer, (arMargin){10, 30, 30, 30});
-  arView* fill = arFill_create(0xFF0000FF);
+  arView* fill = arFill_create(0xFF0F0FFF);
   uint32_t fontColor = 0xFFFF0000;
   arFont font = arFont_newBitmap(olivec_default_font, 2, fontColor);
-  arView* fillText = arText_create("hello world", font, false);
+  arView* fillText = arText_create("hello world", font, false, true);
   arView_addChild(fillContainer, fill);
   arView_addChild(fillContainer, fillText);
   arView_addChild(hstack, fillContainer);
@@ -77,7 +137,7 @@ int main() {
       canvas_data[i] = rand();
     }
     canvas->should_rerender = true;
-    arFill_setColor(fill, getColor());
+    // arFill_setColor(fill, getColor());
     argon_draw(ui, root);
     argon_handleEvents(ui, root);
     //printf("UI drawn %u in %lu->%lu @ %p\n", buffer[0], ui.canvas.width, ui.canvas.height, ui.canvas.pixels);
@@ -91,4 +151,4 @@ int main() {
   arView_destroy(root);
   argon_destroy(ui);
 }
-
+*/
