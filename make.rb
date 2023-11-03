@@ -6,6 +6,7 @@ require 'colorize'
 
 $beaver.set :e
 
+# TODO: remove -g in release
 CFLAGS = "-g -Ideps/olive.c"
 
 OUT = "out"

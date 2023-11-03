@@ -1,6 +1,7 @@
 #include "event.h"
 
 #include "../include/argon.h"
+#include "children_list.h"
 
 #define OLIVEC_IMPLEMENTATION
 #include <olive.c>
@@ -35,8 +36,11 @@ void argon_draw(ArgonUI* argon, arView* root) {
 static void _argon_handleEvent(ArgonUI* ui, arView* view, arPosition parent_pos) {
   arPosition pos = arPosition_add(view->current_pos, parent_pos);
   arEvent_handleAt(ui, view, pos, (arSize){view->previous_canvas.width, view->previous_canvas.height});
-  for (int i = 0; i < view->children->size; i++) {
-    _argon_handleEvent(ui, view->children->values[i], pos);
+
+  arView* child = view->children->first;
+  while (child != NULL) {
+    _argon_handleEvent(ui, child, pos);
+    child = child->next_sibling;
   }
 }
 

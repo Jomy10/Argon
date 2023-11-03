@@ -1,6 +1,4 @@
 #include <SDL2/SDL.h>
-#include "SDL_pixels.h"
-#include "SDL_video.h"
 #include "include/argon.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -24,8 +22,12 @@ arColor getColor() {
   }
 }
 
+arView* root;
+
 void container_onClick(arView* self) {
   printf("Auwch, that hurt!\n");
+  arView_rmChild(root, self);
+  root->should_rerender = true;
 }
 
 #define WIDTH 800
@@ -53,7 +55,10 @@ int main(int argc, char** argv) {
 
   ArgonUI* ui = argon_create(buffer, WIDTH, HEIGHT, WIDTH);
 
-  arView* root = arView_create();
+
+  root = arView_create();
+  arView* background = arFill_create(0xFF00FF00);
+  arView_addChild(root, background);
   arView* container = arContainer_create(100, HEIGHT);
   arView_addChild(root, container);
   arView* fill = arFill_create(0xFFFF0000);
@@ -61,6 +66,7 @@ int main(int argc, char** argv) {
   arView* arText = arText_create("hello world", font, false, true);
   arView_addChild(container, fill);
   arView_addChild(container, arText);
+  arView_setOnClick(container, container_onClick);
 
   while (true) {
     SDL_Event event;
@@ -75,6 +81,24 @@ int main(int argc, char** argv) {
           memset(buffer, 0, window_surface->w * window_surface->h * 4);
           root->should_rerender = true;
         }
+      }
+      if (event.type == SDL_MOUSEBUTTONDOWN) {
+        argon_dispatchEvent(ui, (arEvent) {
+          .type = AR_EV_POINTER_PRESS,
+          .data.pointer_pos = (arPosition) {
+            .x = event.button.x,
+            .y = event.button.y,
+          }
+        });
+      }
+      if (event.type == SDL_MOUSEBUTTONUP) {
+        argon_dispatchEvent(ui, (arEvent) {
+          .type = AR_EV_POINTER_RELEASE,
+          .data.pointer_pos = (arPosition) {
+            .x = event.button.x,
+            .y = event.button.y,
+          }
+        });
       }
     }
 

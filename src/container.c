@@ -1,4 +1,5 @@
 #include "../include/argon.h"
+#include "children_list.h"
 
 #include <stdlib.h>
 
@@ -25,8 +26,11 @@ static void _arContainer_draw(arView* self, Olivec_Canvas maincanvas) {
   // ---> check all dispatched events at once to avoid having to follow pointers too much
   dispatchPos.x += data->margin.l;
   dispatchPos.y += data->margin.u;
-  for (int i = 0; i < self->children->size; i++) {
-    arView_draw(self->children->values[i], canvas, dispatchPos);
+
+  arView* child = self->children->first;
+  while (child != NULL) {
+    arView_draw(child, canvas, dispatchPos);
+    child = child->next_sibling;
   }
 }
 

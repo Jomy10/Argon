@@ -56,10 +56,12 @@ typedef struct {
 
 arPosition arPosition_add(arPosition, arPosition);
 
+// TODO: reducing struct size to reduce allocations
 /// @ingroup arView
 typedef struct _arView {
   void* data;
   struct _arView* parent;
+  struct _arView* next_sibling;
   struct _arChildrenList* children;
   bool should_rerender;
   Olivec_Canvas previous_canvas;
@@ -165,6 +167,7 @@ void arView_destroy(arView* self);
 ///               input events
 void arView_draw(arView* self, Olivec_Canvas, arPosition at);
 void arView_addChild(arView* self, arView* child);
+void arView_rmChild(arView* self, arView* child);
 void arView_setOnClick(arView* self, void (*onClick)(arView* self));
 /// @}
 
@@ -237,11 +240,23 @@ Olivec_Canvas arSubCanvas_getCanvas(arView* self);
 
 /// @}
 
+/// @defgroup ChildrenList arView Children
+/// @{
 struct _arChildrenList {
-  int size;
-  arView** values;
-  int cap;
+  arView* first;
+  arView* last;
 };
+
+typedef struct _arChildrenList ARChildrenList;
+
+ARChildrenList* childrenList_create();
+
+void childrenList_destroy(ARChildrenList* self);
+
+void childrenList_add(ARChildrenList* self, arView* child);
+
+void childrenList_remove(ARChildrenList* self, arView* child);
+/// @}
 
 #ifdef __cplusplus
 }
