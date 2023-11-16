@@ -167,7 +167,11 @@ void arView_destroy(arView* self);
 ///               input events
 void arView_draw(arView* self, Olivec_Canvas, arPosition at);
 void arView_addChild(arView* self, arView* child);
+/// This method will not destory the child, but simply removes it from its parent
 void arView_rmChild(arView* self, arView* child);
+/// Removes all children from the view, these children should be destroyed if
+/// you no longer need them
+void arView_clearChildren(arView* self);
 void arView_setOnClick(arView* self, void (*onClick)(arView* self));
 /// @}
 

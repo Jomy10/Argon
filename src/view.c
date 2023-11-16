@@ -84,6 +84,16 @@ void arView_rmChild(arView* self, arView* child) {
   self->should_rerender = true;
 }
 
+void arView_clearChildren(arView* self) {
+  arView* child = self->children->first;
+  while (child != NULL) {
+    childrenList_remove(self->children, child);
+    child->parent = NULL;
+    child = child->next_sibling;
+  }
+  self->should_rerender = true;
+}
+
 void arView_setOnClick(arView *self, void (*onClick)(arView* self)) {
   self->onClick = onClick;
 }
