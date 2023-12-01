@@ -96,6 +96,7 @@ void argon_handleEvents(ArgonUI*, arView*);
 /// Set the context to be used for any [view]_create() calls
 void argon_setContext(ArgonUI*);
 ArgonUI* argon_getCurrentContext();
+void argon_swapBuffers(ArgonUI* self, arView* root, uint32_t* new_buffer);
 /// @}
 
 typedef struct {

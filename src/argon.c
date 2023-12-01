@@ -1,13 +1,13 @@
 #include "event.h"
 
+#include <stdlib.h>
+#include <assert.h>
+
 #include "../include/argon.h"
 #include "children_list.h"
 
 #define OLIVEC_IMPLEMENTATION
 #include <olive.c>
-
-#include <stdlib.h>
-#include <assert.h>
 
 ArgonUI* argon_create(uint32_t* buffer, int width, int height, int stride) {
   ArgonUI* ar = malloc(sizeof(ArgonUI));
@@ -63,6 +63,14 @@ void argon_setContext(ArgonUI* ui) {
 
 ArgonUI* argon_getCurrentContext() {
   return ctx;
+}
+
+void argon_swapBuffers(ArgonUI* self, arView* root, uint32_t* buffer) {
+  if (self->buffer != buffer) {
+    root->should_rerender = true;
+  }
+  self->buffer = buffer; // TODO: remove this attribute? stored twice in the same struct
+  self->canvas.pixels = buffer;
 }
 
 arPosition arPosition_add(arPosition a, arPosition b) {
