@@ -47,6 +47,9 @@ arView* arView_create() {
   view->current_pos = (arPosition){0,0};
   view->ui = argon_getCurrentContext();
   view->onClick = NULL;
+  #ifdef ARGON_MANAGE_CHILDREN_MANUALLY
+  view->manual_children_management_callback = NULL;
+  #endif
 
   return view;
 }
@@ -61,9 +64,15 @@ void arView_destroy(arView* self) {
   arView* child = self->children->first;
   arView* child_to_destroy;
   while (child != NULL) {
+    #ifndef ARGON_MANAGE_CHILDREN_MANUALLY
     child_to_destroy = child;
     child = child_to_destroy->next_sibling;
     arView_destroy(child_to_destroy);
+    #else
+    if (child->manual_children_management_callback != NULL)
+      child->manual_children_management_callback(child->manual_children_management_data);
+    child = child->next_sibling;
+    #endif
   }
   childrenList_destroy(self->children);
 

@@ -28,6 +28,9 @@
 /// deallocated using `[...]_destroy`. Functions in the form of `[...]_new` create
 /// objects that shouldn't be deallocated.
 ///
+/// **-DARGON_MANAGE_CHILDREN_MANUALLY**
+/// meant for interop with memory managed languages (see swift bindings)
+///
 
 #ifndef _ARGON_H
 #define _ARGON_H
@@ -72,6 +75,10 @@ typedef struct _arView {
   /// nullable
   void (*destroy)(struct _arView* self);
   void (*onClick)(struct _arView* self);
+  #ifdef ARGON_MANAGE_CHILDREN_MANUALLY
+  void* manual_children_management_data;
+  void (*manual_children_management_callback)(void* self);
+  #endif
 } arView;
 
 // Argon //
@@ -180,6 +187,7 @@ void arView_setOnClick(arView* self, void (*onClick)(arView* self));
 /// @{
 arView* arFill_create(arColor);
 void arFill_setColor(arView* self, arColor);
+arColor arFill_getColor(arView* self);
 /// @}
 
 /// @defgroup arContainer

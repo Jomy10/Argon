@@ -25,3 +25,7 @@ void arFill_setColor(arView* self, arColor color) {
   ((arFillData*)self->data)->color = color;
 }
 
+arColor arFill_getColor(arView* self) {
+  return ((arFillData*)self->data)->color;
+}
+
