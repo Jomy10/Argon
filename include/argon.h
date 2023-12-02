@@ -219,7 +219,9 @@ void arVStack_assureMinHeightCap(arView* self, int cap);
 /// @{
 arView* arText_create(char* text, arFont font, bool shouldDeallocateText, bool enableWrapping);
 // Get the size of the whole text
-arSize arText_getSize(arView* self);
+arSize arText_getTextSize(arView* self);
+size_t arText_getSize(arView* self);
+void arText_setSize(arView* self, size_t size);
 // Get the size of a single glyph
 arSize arText_getGlyphSize(arView* self);
 void arText_setText(arView* self, char* text);
@@ -227,7 +229,6 @@ char* arText_getText(arView* self);
 void arText_setBitmapFont(arView* self, arBitmapFont font);
 void arText_setColor(arView* self, arColor color);
 arColor arText_getColor(arView* self);
-void arText_setSize(arView* self, size_t size);
 /// @}
 
 /// @defgroup arCanvas

@@ -113,6 +113,10 @@ void arText_setSize(arView* self, size_t size) {
   ((arTextData*)self->data)->font.size = size;
 }
 
+size_t arText_getSize(arView* self) {
+  return ((arTextData*)self->data)->font.size;
+}
+
 arSize arText_getGlyphSize(arView* self) {
   arTextData* data = (arTextData*) self->data;
   arSize size;
@@ -126,7 +130,7 @@ arSize arText_getGlyphSize(arView* self) {
   return size;
 }
 
-arSize arText_getSize(arView* self) {
+arSize arText_getTextSize(arView* self) {
   arTextData* data = (arTextData*) self->data;
   arSize size;
   switch (data->font.type) {
