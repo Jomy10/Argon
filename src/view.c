@@ -79,11 +79,6 @@ void arView_destroy(arView* self) {
   }
   childrenList_destroy(self->children);
 
-  #ifdef ARGON_USER_DATA
-  if (view->user_data != NULL)
-    free(view->user_data)
-  #endif
-
   free(self);
 }
 
