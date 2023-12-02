@@ -28,8 +28,14 @@
 /// deallocated using `[...]_destroy`. Functions in the form of `[...]_new` create
 /// objects that shouldn't be deallocated.
 ///
+/// ### Options
+///
 /// **-DARGON_MANAGE_CHILDREN_MANUALLY**
 /// meant for interop with memory managed languages (see swift bindings)
+///
+/// **-DARGON_USER_DATA**
+/// adds an additional user_data field to arView, freely usable by the user and
+/// defaulted to NULL
 ///
 
 #ifndef _ARGON_H
@@ -78,6 +84,9 @@ typedef struct _arView {
   #ifdef ARGON_MANAGE_CHILDREN_MANUALLY
   void* manual_children_management_data;
   void (*manual_children_management_callback)(void* self);
+  #endif
+  #ifdef ARGON_USER_DATA
+  void* user_data;
   #endif
 } arView;
 

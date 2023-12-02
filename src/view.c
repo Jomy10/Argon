@@ -50,6 +50,9 @@ arView* arView_create() {
   #ifdef ARGON_MANAGE_CHILDREN_MANUALLY
   view->manual_children_management_callback = NULL;
   #endif
+  #ifdef ARGON_USER_DATA
+  view->user_data = NULL;
+  #endif
 
   return view;
 }
