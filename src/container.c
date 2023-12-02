@@ -50,9 +50,17 @@ void arContainer_setWidth(arView* self, size_t w) {
   ((arContainerData*)self->data)->w = w;
 }
 
+size_t arContainer_getWidth(arView* self) {
+  return ((arContainerData*)self->data)->w;
+}
+
 void arContainer_setHeight(arView* self, size_t h) {
   self->should_rerender = true;
   ((arContainerData*)self->data)->h = h;
+}
+
+size_t arContainer_getHeight(arView* self) {
+  return ((arContainerData*)self->data)->h;
 }
 
 void arContainer_setMargin(arView* self, arMargin margin) {

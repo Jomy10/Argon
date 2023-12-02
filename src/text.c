@@ -80,8 +80,17 @@ arView* arText_create(char* text, arFont font, bool shouldDeallocateText, bool e
 
 void arText_setText(arView* self, char* text) {
   self->should_rerender = true;
-  self->destroy(self); // deallocate text
+  if (
+    ((arTextData*)self->data)->deallocateText &&
+    ((arTextData*)self->data)->text != NULL
+  ) {
+    free(((arTextData*)self->data)->text);
+  }
   ((arTextData*)self->data)->text = text;
+}
+
+char* arText_getText(arView* self) {
+  return ((arTextData*)self->data)->text;
 }
 
 void arText_setBitmapFont(arView* self, arBitmapFont font) {
@@ -93,6 +102,10 @@ void arText_setBitmapFont(arView* self, arBitmapFont font) {
 void arText_setColor(arView* self, arColor color) {
   self->should_rerender = true;
   ((arTextData*)self->data)->font.color = color;
+}
+
+arColor arText_getColor(arView* self) {
+  return ((arTextData*)self->data)->font.color;
 }
 
 void arText_setSize(arView* self, size_t size) {

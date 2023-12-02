@@ -5,4 +5,5 @@ out
 **/*.DS_Store*
 .cache
 a.out*
+docs/todo.md
 

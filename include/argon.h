@@ -194,7 +194,9 @@ arColor arFill_getColor(arView* self);
 /// @{
 arView* arContainer_create(size_t w, size_t h);
 void arContainer_setWidth(arView*, size_t);
+size_t arContainer_getWidth(arView*);
 void arContainer_setHeight(arView*, size_t);
+size_t arContainer_getHeight(arView*);
 void arContainer_setMargin(arView*, arMargin);
 arMargin arContainer_getMargin(arView*);
 /// @}
@@ -221,8 +223,10 @@ arSize arText_getSize(arView* self);
 // Get the size of a single glyph
 arSize arText_getGlyphSize(arView* self);
 void arText_setText(arView* self, char* text);
+char* arText_getText(arView* self);
 void arText_setBitmapFont(arView* self, arBitmapFont font);
 void arText_setColor(arView* self, arColor color);
+arColor arText_getColor(arView* self);
 void arText_setSize(arView* self, size_t size);
 /// @}
 
