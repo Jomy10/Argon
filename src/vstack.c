@@ -44,7 +44,7 @@ void arVStack_setHeight(arView* self, int at_index, int height) {
   }
 }
 
-void arVStack_assureMinheightCap(arView* self, int cap) {
+void arVStack_assureMinHeightCap(arView* self, int cap) {
   IntArray_assureMinCap((IntArray*)self->data, cap);
 }
 
