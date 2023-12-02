@@ -35,7 +35,7 @@
 ///
 /// **-DARGON_USER_DATA**
 /// adds an additional user_data field to arView, freely usable by the user and
-/// defaulted to NULL
+/// defaulted to NULL. User data is automatically freed in the destroy method.
 ///
 
 #ifndef _ARGON_H
