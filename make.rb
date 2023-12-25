@@ -4,45 +4,31 @@ require 'beaver'
 require 'fileutils'
 require 'colorize'
 
-$beaver.set :e
+project = Project.new("Argon", build_dir: "out")
+project.set_configs("Debug", "Release")
+project.c_configs = {
+  "Debug" => C::Configuration.new(cflags: ["-g"]),
+  "Release" => C::Configuration.new(cflags: ["-O3"])
+}
 
-# TODO: remove -g in release
-CFLAGS = "-g -Ideps/olive.c"
+C::Library.new(
+  name: "Argon",
+  sources: "src/**/*.c",
+  include: ["deps/olive.c", "include"]
+)
 
-OUT = "out"
-OBJ_OUT = File.join(OUT, "obj")
+C::Library.pkg_config("sdl2")
 
-[OUT, OBJ_OUT].each do |dir|
-  if !Dir.exist? dir
-    FileUtils.mkdir_p dir
-  end
-end
-
-cmd :build do
-  call :build_obj
-end
-
-cmd :build_obj, each(["src/*.c"]) do
-  sh %(clang -c #{CFLAGS} #{$file} -o #{File.join(OBJ_OUT, $file.name + ".o")})
-end
-
-cmd :staticlib do
-  puts "unimplemented"
-end
-
-cmd :dynlib do
-  puts "unimplemented"
-end
-
-cmd :test do
-  call :build
-  sh %(clang #{CFLAGS} #{`pkg-config sdl2 --cflags`.gsub("\n", "")} test.c out/obj/*.o #{`pkg-config sdl2 --libs`.gsub("\n", "")})#-Iminifb/include -Iminifb/src minifb/src/*.c minifb/src/macosx/*.m -Iinclude -framework Metal -framework MetalKit -framework AppKit)
-end
+C::Executable.new(
+  name: "test",
+  sources: ["test.c"],
+  dependencies: ["sdl2", "Argon"]
+)
 
 # Generate documentation
 cmd :docs do
-  sh silent %(rm -rf docs/html)
-  sh silent %(rm -rf docs/latex)
+  _sh %(rm -rf docs/html)
+  _sh %(rm -rf docs/latex)
   Dir.chdir("docs") do
     sh %(doxygen argon.doxygen)
   end
@@ -50,10 +36,10 @@ end
 
 cmd :clean do
   sh %(rm -rf .beaver)
-  sh %(rm -rf #{OUT})
+  sh %(rm -rf #{project.build_dir})
   sh %(rm -rf docs/html)
   sh %(rm -rf docs/latex)
 end
 
-$beaver.end
+$beaver.default_command = ""
 

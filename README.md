@@ -16,15 +16,13 @@ git clone https://github.com/jomy10/argon --recurse-submdules
 cd argon
 
 # Build the project
-./make.rb staticlib
-./make.rb dynlib
+./make.rb build Argon
 ```
 
 ## Running examples
 
 ```sh
-./make.rb test
-./a.out [example_name]
+./make.rb run test
 ```
 
 ## License
